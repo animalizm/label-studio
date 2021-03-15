@@ -20,3 +20,4 @@ ENV DJANGO_SETTINGS_MODULE=core.settings.label_studio
 COPY . /label-studio
 RUN python3.8 setup.py develop
 RUN cd label_studio && python3.8 manage.py migrate
+CMD [ "uwsgi", "--ini",  "./uwsgi.ini", "--chdir", "./label_studio" ]
