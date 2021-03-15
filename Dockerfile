@@ -21,4 +21,5 @@ ENV DJANGO_SETTINGS_MODULE=core.settings.label_studio
 COPY . /label-studio
 RUN python3.8 setup.py develop
 RUN cd label_studio && python3.8 manage.py migrate
+RUN cd label_studio && python3.8 manage.py collectstatic
 CMD [ "label-studio" ]
