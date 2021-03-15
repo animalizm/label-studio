@@ -5,7 +5,7 @@ services:
   nginx:
     image: nginx:latest
     ports:
-      - "80:80"
+      - 80:80
     volumes:
       - static:/label-studio/label_studio/core/static_build/:rw
       - media:/label-studio/label_studio/core/media/:rw
@@ -23,7 +23,14 @@ services:
       - "8080"
     depends_on:
       - db
-    command: [ "uwsgi", "--ini",  "./uwsgi.ini", "--chdir", "./label_studio" ]
+    environment:
+      - DJANGO_DB=default
+      - POSTGRE_NAME=postgres
+      - POSTGRE_USER=postgres
+      - POSTGRE_PASSWORD=
+      - POSTGRE_PORT=5432
+      - POSTGRE_HOST=db
+    command: [ "/label-studio/wait-for-it.sh", "db", "/usr/local/bin/label-studio" ]
     
   db:
     image: postgres:11.5
@@ -31,8 +38,6 @@ services:
     restart: always
     environment:
       - POSTGRES_HOST_AUTH_METHOD=trust
-    volumes:
-      - ${POSTGRES_DATA_DIR:-./postgres-data}:/var/lib/postgresql/data
     ports:
       - 5432:5432
 

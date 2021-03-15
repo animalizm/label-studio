@@ -12,5 +12,6 @@ until PGPASSWORD=$POSTGRES_PASSWORD psql -h "$host" -U "postgres" -c '\q'; do
   sleep 1
 done
 
+python3.8 label_studio/manage.py migrate 
 >&2 echo "Postgres is up - executing command"
 exec $cmd

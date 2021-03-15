@@ -11,6 +11,7 @@ RUN apt-get update && apt-get install -y build-essential postgresql-client pytho
 # Copy and install requirements.txt first for caching
 COPY deploy/requirements.txt /label-studio
 COPY deploy/uwsgi.ini /label-studio
+COPY wait-for-it.sh /label-studio
 
 RUN pip3 install --upgrade pip
 RUN pip3 install -r requirements.txt
@@ -20,4 +21,4 @@ ENV DJANGO_SETTINGS_MODULE=core.settings.label_studio
 COPY . /label-studio
 RUN python3.8 setup.py develop
 RUN cd label_studio && python3.8 manage.py migrate
-CMD [ "uwsgi", "--ini",  "./uwsgi.ini", "--chdir", "./label_studio" ]
+CMD [ "label-studio" ]
